@@ -8,18 +8,35 @@ Resources:
     Properties:
       StageName: dev
     
-  HelloFunction:
+  ConcurrencyFunction:
     Type: 'AWS::Serverless::Function'
     Properties:
-      Handler: handler.hello
+      Handler: handler.concurrency
       Runtime: nodejs12.x
-      CodeUri: ./hello
+      CodeUri: ./concurrency
+      AutoPublishAlias: live
+      ProvisionedConcurrencyConfig:
+        ProvisionedConcurrentExecutions: 10
       Events:
         HelloAPI:
           Type: Api
           Properties:
             RestApiId: !Ref MyApi
-            Path: /hello
+            Path: /concurrency
+            Method: GET
+    
+  NormalFunction:
+    Type: 'AWS::Serverless::Function'
+    Properties:
+      Handler: handler.normal
+      Runtime: nodejs12.x
+      CodeUri: ./normal
+      Events:
+        HelloAPI:
+          Type: Api
+          Properties:
+            RestApiId: !Ref MyApi
+            Path: /normal
             Method: GET
   
 Outputs:
